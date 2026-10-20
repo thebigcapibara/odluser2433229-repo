@@ -1,0 +1,115 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+      WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Gulp build
+        run: npm run build
+
+      - name: Build and push latest Docker image
+        env:
+          REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+          REPOSITORY: "prime-website"
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          cd dist
+          IMAGE_TAG=$REGISTRY/$REPOSITORY:${COMMIT_SHA}
+          echo "Building Docker image with tag $IMAGE_TAG"
+          docker build -t $IMAGE_TAG .
+
+      - name: Download Wiz CLI
+        run: curl -o wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+
+      - name: Run Wiz CLI image scan
+        id: scan
+        run: |
+          mkdir -p $WIZ_DIR
+          ./wizcli docker scan -i $REGISTRY/$REPOSITORY:${COMMIT_SHA} --policy ${ODLUSER}-vuln-block
+        continue-on-error: false
+        env:
+          REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+          REPOSITORY: "prime-website"
+          COMMIT_SHA: ${{ github.sha }}
+          ODLUSER: ${{ secrets.ODLUSER }}
+          WIZ_DIR: ${{ github.workspace }}/.wiz
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/my-github-actions-role
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Push the tagged Docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+          REPOSITORY: "prime-website"
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          cd dist
+          IMAGE_TAG=$REGISTRY/$REPOSITORY:${COMMIT_SHA}
+          docker push $IMAGE_TAG
+
+      - name: Verify Docker image
+        env:
+          REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+          REPOSITORY: "prime-website"
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          REPOSITORY_URI=$REGISTRY/$REPOSITORY
+          IMAGE_TAG=$REPOSITORY_URI:${COMMIT_SHA}
+          echo "Pulling Docker image with URI: $IMAGE_TAG"
+          docker pull $IMAGE_TAG
+
+      - name: Deploy to Amazon ECS Express Mode
+        env:
+          AWS_REGION: "us-east-1"
+          SERVICE_ARN: ${{ secrets.ECS_EXPRESS_SERVICE_ARN }}
+          REPOSITORY: "prime-website"
+          COMMIT_SHA: ${{ github.sha }}
+          ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        run: |
+          IMAGE_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY:$COMMIT_SHA
+          aws ecs update-express-gateway-service --service-arn $SERVICE_ARN --primary-container image=$IMAGE_URI
+
+      - name: Run Wiz CLI image tag
+        env:
+          ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: "us-east-1"
+          REPOSITORY: "prime-website"
+          COMMIT_SHA: ${{ github.sha }}
+          WIZ_DIR: ${{ github.workspace }}/.wiz
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+        run: |
+          IMAGE_URI=$ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$COMMIT_SHA
+          ./wizcli docker tag -i $IMAGE_URI
