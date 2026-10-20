@@ -26,5 +26,5 @@ Resources:
                 IgnorePublicAcls: true
                 RestrictPublicBuckets: true
 
-                # wiz-scan ignore-line
+                # wiz-scan ignore-linesss
                 AccessControl: PublicRead
