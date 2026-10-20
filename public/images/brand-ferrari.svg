@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 150" role="img" aria-label="Ferrari">
+  <path d="M110 12c26 0 46 8 52 14v58c0 18-22 34-52 44-30-10-52-26-52-44V26c6-6 26-14 52-14z" fill="none" stroke="#5b6472" stroke-width="7"/>
+  <path d="M104 34c8-4 14 2 12 10-2 6-2 10 2 14 6 6 4 16-4 20-6 3-12 0-14-6-2-8 2-12 2-18 0-8-4-16 2-20z" fill="#5b6472"/>
+  <path d="M120 48c6 4 10 12 8 20l-8-4z" fill="#5b6472"/>
+  <text x="110" y="142" font-family="Georgia, serif" font-size="26" fill="#5b6472" text-anchor="middle" font-style="italic">Ferrari</text>
+</svg>

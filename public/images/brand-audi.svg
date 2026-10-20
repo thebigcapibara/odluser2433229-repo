@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 150" role="img" aria-label="Audi">
+  <g fill="none" stroke="#5b6472" stroke-width="8">
+    <circle cx="58" cy="62" r="34"/><circle cx="92" cy="62" r="34"/>
+    <circle cx="126" cy="62" r="34"/><circle cx="160" cy="62" r="34"/>
+  </g>
+  <text x="110" y="144" font-family="Georgia, serif" font-size="26" fill="#5b6472" text-anchor="middle" letter-spacing="3">Audi</text>
+</svg>

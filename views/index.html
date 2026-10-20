@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prime Motors | Find Your Dream Car</title>
+  <!-- build:css -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- endbuild -->
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__copy">
+      <a class="logo" href="/">
+        <span class="logo__prime">PRIME</span>
+        <span class="logo__motors">MOTORS</span>
+        <span class="logo__spark">&#10022;</span>
+      </a>
+      <h1 class="hero__title">Find Your Dream <span class="hero__accent">CAR</span></h1>
+      <a class="btn btn--dark" href="#inventory">Order Now</a>
+    </div>
+    <div class="hero__art">
+      <img src="images/hero-car.svg" alt="Featured car">
+      <div class="hero__dots"><span class="is-active"></span><span></span><span></span></div>
+      <div class="hero__arrows"><button type="button" aria-label="Previous">&#8249;</button><button type="button" aria-label="Next">&#8250;</button></div>
+    </div>
+  </header>
+
+  <form class="searchbar" action="/search" method="get">
+    <label class="searchbar__field">
+      <span class="searchbar__label">New/Used</span>
+      <select name="condition">
+        <option>New &amp; Used</option>
+        <option>New</option>
+        <option>Used</option>
+      </select>
+    </label>
+    <label class="searchbar__field">
+      <span class="searchbar__label">Make</span>
+      <select name="make">
+        {{#makes}}
+        <option>{{name}}</option>
+        {{/makes}}
+        <option>All Makes</option>
+      </select>
+    </label>
+    <label class="searchbar__field">
+      <span class="searchbar__label">Model</span>
+      <select name="model">
+        <option>All Models</option>
+        {{#cars}}
+        <option>{{model}}</option>
+        {{/cars}}
+      </select>
+    </label>
+    <button class="searchbar__submit" type="submit" aria-label="Search">&#9906;</button>
+  </form>
+
+  <section class="brands" aria-label="Brands we carry">
+    <img src="images/brand-honda.svg" alt="Honda">
+    <img src="images/brand-ferrari.svg" alt="Ferrari">
+    <img src="images/brand-toyota.svg" alt="Toyota">
+    <img src="images/brand-audi.svg" alt="Audi">
+    <img src="images/brand-honda.svg" alt="Honda">
+    <img src="images/brand-tesla.svg" alt="Tesla">
+  </section>
+
+  <section id="inventory" class="inventory">
+    <table class="inventory__table">
+      <thead>
+        <tr>
+          <th>IMAGE</th>
+          <th>VIN</th>
+          <th>MAKE &amp; MODEL</th>
+          <th>YEAR</th>
+          <th>PRICE</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#cars}}
+        <tr>
+          <td><img class="inventory__thumb" src="{{image}}" alt="{{makeModel}}"></td>
+          <td>{{vin}}</td>
+          <td>{{makeModel}}</td>
+          <td>{{year}}</td>
+          <td>{{price}}</td>
+        </tr>
+        {{/cars}}
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; Prime Motors. Sample application for the Securing Cloud Development lab.</p>
+  </footer>
+
+  <!-- build:js -->
+  <script src="js/main.js"></script>
+  <!-- endbuild -->
+</body>
+</html>
