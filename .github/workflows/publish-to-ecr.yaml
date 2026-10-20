@@ -48,8 +48,7 @@ jobs:
         id: scan
         run: |
           mkdir -p $WIZ_DIR
-          ./wizcli docker scan -i $REGISTRY/$REPOSITORY:${COMMIT_SHA} --policy ${ODLUSER}-security-cli
-        continue-on-error: false
+          ./wizcli docker scan -i $REGISTRY/$REPOSITORY:${COMMIT_SHA} --policy ${ODLUSER}-vuln-block
         env:
           REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
           REPOSITORY: "prime-website"
