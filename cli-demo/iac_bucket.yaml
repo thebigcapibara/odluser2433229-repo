@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for a publicly accessible S3 bucket.
+
+Resources:
+    WideOpenBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: open_bucket_odl_user_1540112
+            # wiz-scan ignore-line
+            AccessControl: PublicRead
+
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for a publicly accessible S3 bucket with Block Public Access compliance.
+
+Resources:
+    WideOpenBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: open-bucket
+            PublicAccessBlockConfiguration:
+
+                # wiz-scan ignore-line
+                BlockPublicAcls: true
+                BlockPublicPolicy: true
+                IgnorePublicAcls: true
+                RestrictPublicBuckets: true
+
+                # wiz-scan ignore-line
+                AccessControl: PublicRead

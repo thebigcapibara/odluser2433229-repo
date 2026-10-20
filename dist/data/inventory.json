@@ -1,0 +1,66 @@
+{
+  "makes": [
+    { "name": "INFINITI" },
+    { "name": "Honda" },
+    { "name": "Toyota" },
+    { "name": "Audi" },
+    { "name": "Ferrari" },
+    { "name": "Tesla" }
+  ],
+  "cars": [
+    {
+      "vin": "xxxx",
+      "make": "Honda",
+      "model": "Accord",
+      "makeModel": "Honda Accord",
+      "year": 2020,
+      "price": "$22,000",
+      "image": "images/car-accord.svg"
+    },
+    {
+      "vin": "xxxx",
+      "make": "Toyota",
+      "model": "Camry",
+      "makeModel": "Toyota Camry",
+      "year": 2019,
+      "price": "$20,000",
+      "image": "images/car-camry.svg"
+    },
+    {
+      "vin": "xxxx",
+      "make": "Audi",
+      "model": "A4",
+      "makeModel": "Audi A4",
+      "year": 2021,
+      "price": "$31,500",
+      "image": "images/car-a4.svg"
+    },
+    {
+      "vin": "xxxx",
+      "make": "Tesla",
+      "model": "Model 3",
+      "makeModel": "Tesla Model 3",
+      "year": 2022,
+      "price": "$38,000",
+      "image": "images/car-model3.svg"
+    },
+    {
+      "vin": "xxxx",
+      "make": "INFINITI",
+      "model": "Q50",
+      "makeModel": "INFINITI Q50",
+      "year": 2020,
+      "price": "$27,900",
+      "image": "images/car-q50.svg"
+    },
+    {
+      "vin": "xxxx",
+      "make": "Ferrari",
+      "model": "Portofino",
+      "makeModel": "Ferrari Portofino",
+      "year": 2018,
+      "price": "$189,000",
+      "image": "images/car-portofino.svg"
+    }
+  ]
+}
